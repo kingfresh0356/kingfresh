@@ -609,6 +609,27 @@
               </div>
             </div>
 
+            <!-- CEO Photo -->
+            <div class="card">
+              <div class="card-header"><div class="card-title">👤 CEO / Founder Photo</div></div>
+              <div class="card-body">
+                <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem;line-height:1.6;">Upload a photo of Mohan Lal Sharma. It will appear on the About Us page. <strong>Max 400 KB</strong> — compress at <a href="https://tinypng.com" target="_blank" style="color:var(--green);">tinypng.com</a> first.</p>
+                <div id="ceo-drop" style="border:2px dashed var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:.25s;" onclick="document.getElementById('ceo-img-file').click()" ondragover="event.preventDefault();this.style.borderColor='var(--green)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleCeoImgDrop(event)">
+                  <div id="ceo-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1.5rem;color:var(--muted);font-size:.85rem;text-align:center;">
+                    <span style="font-size:2.5rem;">👔</span>
+                    <span>Click or drag CEO photo here</span>
+                    <span style="font-size:.72rem;">JPEG / PNG · Passport/portrait style recommended</span>
+                  </div>
+                  <div id="ceo-preview" style="display:none;position:relative;text-align:center;padding:1rem;">
+                    <img id="ceo-preview-img" style="width:120px;height:120px;border-radius:50%;object-fit:cover;border:3px solid var(--green);"/>
+                    <button type="button" onclick="event.stopPropagation();clearCeoImg()" style="display:block;margin:.75rem auto 0;background:rgba(198,40,40,0.9);color:#fff;border:none;border-radius:6px;padding:.35rem .8rem;cursor:pointer;font-size:.8rem;">✕ Remove Photo</button>
+                  </div>
+                </div>
+                <input type="file" id="ceo-img-file" accept="image/*" style="display:none;" onchange="handleCeoImg(this)"/>
+                <button class="btn btn-primary" style="margin-top:.85rem;width:100%;" onclick="saveCeoPhoto()"><i class="fas fa-save"></i> Save CEO Photo</button>
+              </div>
+            </div>
+
             <!-- Change Password -->
             <div class="card">
               <div class="card-header"><div class="card-title">🔐 Change Admin Password</div></div>
@@ -734,6 +755,22 @@
         <div class="form-group full">
           <label>Short Description</label>
           <textarea class="form-textarea" id="p-desc" placeholder="Describe the product, quality, and key export features…"></textarea>
+        </div>
+        <div class="form-group full">
+          <label>📷 Product Image <span class="form-hint">(optional — replaces emoji on website. Max 400 KB. Use tinypng.com to compress first.)</span></label>
+          <div id="p-img-drop" style="border:2px dashed var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:.25s;" onclick="document.getElementById('p-img-file').click()" ondragover="event.preventDefault();this.style.borderColor='var(--green)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="handleProductImgDrop(event)">
+            <div id="p-img-placeholder" style="display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1.5rem;color:var(--muted);font-size:.88rem;text-align:center;">
+              <span style="font-size:2rem;">📷</span>
+              <span>Click or drag & drop a product photo here</span>
+              <span style="font-size:.75rem;">JPEG / PNG · Square recommended · Max 400 KB</span>
+            </div>
+            <div id="p-img-preview" style="display:none;position:relative;">
+              <img id="p-img-preview-img" style="width:100%;max-height:180px;object-fit:cover;display:block;"/>
+              <button type="button" onclick="event.stopPropagation();clearProductImg()" style="position:absolute;top:.5rem;right:.5rem;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:6px;padding:.3rem .65rem;cursor:pointer;font-size:.8rem;">✕ Remove</button>
+            </div>
+          </div>
+          <input type="file" id="p-img-file" accept="image/*" style="display:none;" onchange="handleProductImg(this)"/>
+          <input type="hidden" id="p-imgUrl" value=""/>
         </div>
         <div class="form-group full">
           <div class="toggle-row">
@@ -897,7 +934,7 @@ function renderProductsTable(filter = "all", search = "") {
     <tr>
       <td>
         <div style="display:flex;align-items:center;gap:.75rem;">
-          <div class="prod-emoji">${p.emoji || "📦"}</div>
+          <div class="prod-emoji">${p.imgUrl ? `<img src="${p.imgUrl}" style="width:42px;height:42px;object-fit:cover;border-radius:8px;" alt=""/>` : (p.emoji || "📦")}</div>
           <div class="prod-info">
             <div class="prod-name">${escHtml(p.name)}</div>
             ${p.badge ? `<span class="tag tag-gold" style="font-size:.65rem;">${escHtml(p.badge)}</span>` : ""}
@@ -954,6 +991,7 @@ function openProductModal(id) {
   document.getElementById("p-category").value = "Fruits";
   document.getElementById("p-active").checked = true;
   document.getElementById("modal-title").textContent = "Add New Product";
+  clearProductImg();
 
   if (id) {
     const p = allProducts.find(x => x.id === id);
@@ -970,6 +1008,8 @@ function openProductModal(id) {
     document.getElementById("p-tags").value         = Array.isArray(p.tags) ? p.tags.join(", ") : (p.tags || "");
     document.getElementById("p-desc").value         = p.desc || "";
     document.getElementById("p-active").checked     = p.active !== false;
+    // Load existing image if any
+    if (p.imgUrl) setProductImgPreview(p.imgUrl);
   }
 }
 
@@ -985,6 +1025,7 @@ function saveProduct() {
   const data = {
     name,
     emoji:        emoji || "📦",
+    imgUrl:       document.getElementById("p-imgUrl").value || "",
     category:     document.getElementById("p-category").value,
     badge:        document.getElementById("p-badge").value.trim(),
     origin:       document.getElementById("p-origin").value.trim(),
@@ -1131,6 +1172,7 @@ function loadSettings() {
   document.getElementById("s-tons").value         = s.tonsYear       || "10,000+";
   document.getElementById("s-clients").value      = s.clients        || "500+";
   document.getElementById("s-satisfaction").value = s.satisfaction   || "99%";
+  loadCeoPreview();
 }
 
 document.getElementById("settings-form").addEventListener("submit", (e) => {
@@ -1192,6 +1234,100 @@ function importData(input) {
     input.value = "";
   };
   reader.readAsText(file);
+}
+
+/* ── PRODUCT IMAGE UPLOAD ─────────────────────────── */
+function handleProductImg(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 400 * 1024) {
+    showToast("Image too large! Please compress to under 400 KB at tinypng.com", "error");
+    input.value = "";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => setProductImgPreview(e.target.result);
+  reader.readAsDataURL(file);
+}
+
+function handleProductImgDrop(event) {
+  event.preventDefault();
+  document.getElementById("p-img-drop").style.borderColor = "var(--border)";
+  const file = event.dataTransfer.files[0];
+  if (!file || !file.type.startsWith("image/")) return;
+  if (file.size > 400 * 1024) { showToast("Image too large! Max 400 KB", "error"); return; }
+  const reader = new FileReader();
+  reader.onload = e => setProductImgPreview(e.target.result);
+  reader.readAsDataURL(file);
+}
+
+function setProductImgPreview(dataUrl) {
+  document.getElementById("p-imgUrl").value = dataUrl;
+  document.getElementById("p-img-preview-img").src = dataUrl;
+  document.getElementById("p-img-preview").style.display = "block";
+  document.getElementById("p-img-placeholder").style.display = "none";
+}
+
+function clearProductImg() {
+  document.getElementById("p-imgUrl").value = "";
+  document.getElementById("p-img-file").value = "";
+  document.getElementById("p-img-preview").style.display = "none";
+  document.getElementById("p-img-placeholder").style.display = "flex";
+}
+
+/* ── CEO PHOTO UPLOAD ─────────────────────────────── */
+function handleCeoImg(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 400 * 1024) {
+    showToast("Photo too large! Please compress to under 400 KB at tinypng.com", "error");
+    input.value = "";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = e => setCeoImgPreview(e.target.result);
+  reader.readAsDataURL(file);
+}
+
+function handleCeoImgDrop(event) {
+  event.preventDefault();
+  document.getElementById("ceo-drop").style.borderColor = "var(--border)";
+  const file = event.dataTransfer.files[0];
+  if (!file || !file.type.startsWith("image/")) return;
+  if (file.size > 400 * 1024) { showToast("Photo too large! Max 400 KB", "error"); return; }
+  const reader = new FileReader();
+  reader.onload = e => setCeoImgPreview(e.target.result);
+  reader.readAsDataURL(file);
+}
+
+function setCeoImgPreview(dataUrl) {
+  document.getElementById("ceo-preview-img").src = dataUrl;
+  document.getElementById("ceo-preview").style.display = "block";
+  document.getElementById("ceo-placeholder").style.display = "none";
+  // store temporarily so saveCeoPhoto can pick it up
+  document.getElementById("ceo-drop").dataset.pending = dataUrl;
+}
+
+function clearCeoImg() {
+  document.getElementById("ceo-img-file").value = "";
+  document.getElementById("ceo-preview").style.display = "none";
+  document.getElementById("ceo-placeholder").style.display = "flex";
+  document.getElementById("ceo-drop").dataset.pending = "";
+}
+
+function saveCeoPhoto() {
+  const dataUrl = document.getElementById("ceo-drop").dataset.pending || "";
+  const current = KFData.getSettings();
+  KFData.saveSettings({ ...current, ceoPhoto: dataUrl });
+  showToast(dataUrl ? "CEO photo saved ✅ — visible on About page" : "CEO photo removed ✅");
+}
+
+function loadCeoPreview() {
+  const s = KFData.getSettings();
+  if (s.ceoPhoto) {
+    setCeoImgPreview(s.ceoPhoto);
+    document.getElementById("ceo-drop").dataset.pending = s.ceoPhoto;
+  }
 }
 
 /* ── TOAST ────────────────────────────────────────── */

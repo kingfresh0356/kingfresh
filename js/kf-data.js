@@ -29,7 +29,8 @@ const DEFAULT_SETTINGS = {
   tonsYear:      "10,000+",
   clients:       "500+",
   yearsExp:      "6+",
-  satisfaction:  "99%"
+  satisfaction:  "99%",
+  ceoPhoto:      ""   // base64 dataURL of CEO/founder photo (set via admin panel)
 };
 
 /* ── Default products ──────────────────────────────────── */

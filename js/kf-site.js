@@ -41,7 +41,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (catalog) renderFullCatalog(catalog);
   }
 
-  /* ── 3. Contact form → save enquiry in admin panel ─── */
+  /* ── 3. CEO / Founder photo ────────────────────────── */
+  const ceoAvatar = document.getElementById("ceo-avatar");
+  if (ceoAvatar && s.ceoPhoto) {
+    ceoAvatar.innerHTML = `<img src="${s.ceoPhoto}" alt="Mohan Lal Sharma" style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--clr-secondary);"/>`;
+  }
+
+  /* ── 4. Contact form → save enquiry in admin panel ─── */
   const form = document.getElementById("contact-form");
   if (form) wireEnquiryCapture(form);
 });
@@ -59,9 +65,16 @@ function buildCard(p, idx) {
   const tags   = tagArr.slice(0, 3)
     .map(t => `<span class="product-tag">${escHtml(t)}</span>`).join("");
 
+  // Show uploaded image if available, otherwise fall back to emoji
+  const hasImg     = p.imgUrl && p.imgUrl.length > 10;
+  const imgContent = hasImg
+    ? `<img src="${p.imgUrl}" alt="${escHtml(p.name)}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit;"/>`
+    : (p.emoji || "🌿");
+  const imgStyle   = hasImg ? ` style="padding:0;overflow:hidden;"` : "";
+
   return `
     <article class="product-card reveal ${STAGGER[idx % 6]}" role="listitem">
-      <div class="product-card-img">${p.emoji || "🌿"}${badge}</div>
+      <div class="product-card-img"${imgStyle}>${imgContent}${badge}</div>
       <div class="product-card-body">
         <h3 class="product-card-name">${escHtml(p.name)}</h3>
         <div class="product-card-origin">

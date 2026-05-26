@@ -1,0 +1,97 @@
+# =====================================================
+# KingFresh Trading Company — Decap CMS Configuration
+# Client accesses: https://yourdomain.com/admin
+# =====================================================
+
+backend:
+  name: git-gateway           # Netlify Identity manages logins
+  branch: main                # Which git branch to edit
+
+# Allow client to upload images (logos, product photos etc.)
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+# =====================================================
+# COLLECTIONS — each is a section the client can edit
+# =====================================================
+collections:
+
+  # ---- SITE SETTINGS (company info, contact details) ----
+  - name: "settings"
+    label: "⚙️ Site Settings"
+    files:
+      - name: "company"
+        label: "Company Information"
+        file: "_data/company.json"
+        fields:
+          - { label: "Company Name",        name: company_name,  widget: string,  default: "KingFresh Trading Company" }
+          - { label: "Tagline",             name: tagline,       widget: string,  default: "From Farm to the World" }
+          - { label: "Phone / WhatsApp",    name: phone,         widget: string,  default: "+91 98765 43210" }
+          - { label: "Email",               name: email,         widget: string,  default: "exports@kingfresh.com" }
+          - { label: "Office Address",      name: address,       widget: text }
+          - { label: "WhatsApp Link",       name: whatsapp_url,  widget: string }
+          - { label: "Years of Experience", name: years_exp,     widget: number,  default: 15 }
+          - { label: "Countries Served",    name: countries,     widget: number,  default: 50 }
+          - { label: "Tons Per Year",       name: tons_year,     widget: number,  default: 10000 }
+          - { label: "Happy Clients",       name: clients,       widget: number,  default: 1200 }
+
+  # ---- PRODUCTS ----
+  - name: "products"
+    label: "🍎 Products"
+    folder: "_data/products"
+    create: true          # Client can ADD new products
+    slug: "{{slug}}"
+    fields:
+      - { label: "Product Name",    name: title,       widget: string }
+      - label: "Category"
+        name: category
+        widget: select
+        options: ["Fruits", "Vegetables", "Exotic", "Herbs"]
+      - { label: "Emoji Icon",      name: emoji,       widget: string,  hint: "Paste an emoji e.g. 🥭" }
+      - { label: "Origin / Region", name: origin,      widget: string,  hint: "e.g. Ratnagiri, Maharashtra" }
+      - { label: "Availability",    name: availability, widget: string,  hint: "e.g. April–June / Year Round" }
+      - { label: "Product Badge",   name: badge,       widget: string,  required: false, hint: "e.g. Bestseller, New, Premium" }
+      - label: "Tags (quality grades, varieties etc.)"
+        name: tags
+        widget: list
+        hint: "Add tags like 'GI Tagged', 'Export Grade A', 'Year Round'"
+      - { label: "Short Description", name: description, widget: text, required: false }
+      - { label: "Active / Visible",  name: active,    widget: boolean, default: true }
+
+  # ---- TESTIMONIALS ----
+  - name: "testimonials"
+    label: "⭐ Testimonials"
+    folder: "_data/testimonials"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Client Name",    name: name,    widget: string }
+      - { label: "Company & Country", name: company, widget: string, hint: "e.g. FreshMart Italia, Italy 🇮🇹" }
+      - { label: "Role / Title",   name: role,    widget: string }
+      - { label: "Quote",          name: quote,   widget: text }
+      - label: "Rating (stars)"
+        name: rating
+        widget: select
+        options: ["5", "4", "3"]
+        default: "5"
+
+  # ---- CERTIFICATIONS ----
+  - name: "certifications"
+    label: "🏆 Certifications"
+    folder: "_data/certifications"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Certificate Name",  name: title,       widget: string }
+      - { label: "Emoji Icon",        name: emoji,       widget: string }
+      - { label: "Description",       name: description, widget: text }
+
+  # ---- EXPORT REGIONS / MARKETS ----
+  - name: "regions"
+    label: "🌍 Export Regions"
+    folder: "_data/regions"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Region Name",  name: name,  widget: string, hint: "e.g. Middle East" }
+      - { label: "Flag Emoji",   name: flag,  widget: string, hint: "e.g. 🇦🇪" }

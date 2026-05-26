@@ -1,0 +1,77 @@
+// =====================================================
+// KingFresh Trading Company — Firestore Security Rules
+// Paste these into: Firebase Console → Firestore → Rules
+// =====================================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: is the request from a logged-in user?
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Helper: is this user an admin?
+    function isAdmin() {
+      return isAuth() &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // Helper: is this the owner of the document?
+    function isOwner(uid) {
+      return isAuth() && request.auth.uid == uid;
+    }
+
+    // ── PRODUCTS ──────────────────────────────────────
+    // Anyone can read active products; only admin can write
+    match /products/{productId} {
+      allow read: if resource.data.active == true || isAdmin();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ── ORDERS ────────────────────────────────────────
+    // Customers can create orders and read their own
+    // Admin can read all and update status
+    match /orders/{orderId} {
+      allow create: if isAuth();
+      allow read: if isAdmin() || isOwner(resource.data.userId);
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── REVIEWS ───────────────────────────────────────
+    // Anyone can read approved reviews
+    // Logged-in users can create (one per order)
+    // Admin can approve/delete
+    match /reviews/{reviewId} {
+      allow read: if resource.data.approved == true || isAdmin();
+      allow create: if isAuth();
+      allow update, delete: if isAdmin();
+    }
+
+    // ── SETTINGS ──────────────────────────────────────
+    // Anyone can read (contact info, stats shown on site)
+    // Only admin can write
+    match /settings/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ── USERS ─────────────────────────────────────────
+    // Each user reads/writes own profile
+    // Admin can read all users
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ── NOTIFICATIONS ─────────────────────────────────
+    // Admin sees all; created by system
+    match /notifications/{notifId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}

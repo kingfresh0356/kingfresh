@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KF Admin</title>
+  <!-- No SEO meta tags intentionally — keep this page out of search engines -->
+  <meta name="robots" content="noindex, nofollow"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --green:#0a5c36; --green-l:#127a49; --green-d:#053d24;
+      --gold:#c9a227;  --gold-l:#e8c14f; --gold-d:#9e7c0f;
+      --dark:#03100a;  --dark2:#071a0e;
+      --bg:#f4f7f5;    --white:#fff;
+      --text:#0f1f14;  --muted:#6b8f77;
+      --border:rgba(10,92,54,0.14);
+      --red:#c62828;   --blue:#1565c0; --orange:#e65100;
+      --sidebar:220px;
+    }
+    html{font-size:15px;}
+    body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+    a{text-decoration:none;color:inherit;}
+    input,select,textarea,button{font-family:inherit;}
+    ::-webkit-scrollbar{width:5px;}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+    /* ── LOGIN SCREEN ─────────────────────────────── */
+    #login-screen{
+      position:fixed;inset:0;
+      background:linear-gradient(155deg,#020c06 0%,var(--green-d) 50%,#0a4428 100%);
+      display:flex;align-items:center;justify-content:center;
+      z-index:9999;
+    }
+    .login-box{
+      background:rgba(255,255,255,0.04);
+      border:1px solid rgba(201,162,39,0.2);
+      border-radius:20px;
+      padding:2.5rem 2.5rem 2rem;
+      width:100%;max-width:380px;
+      backdrop-filter:blur(20px);
+      box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    }
+    .login-logo{
+      display:flex;align-items:center;gap:.75rem;margin-bottom:2rem;
+    }
+    .login-logo-icon{
+      width:44px;height:44px;background:linear-gradient(135deg,var(--green-l),var(--gold));
+      border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+    }
+    .login-logo-text{font-size:1.2rem;font-weight:700;color:#fff;line-height:1.1;}
+    .login-logo-text span{display:block;font-size:.6rem;color:var(--gold-l);letter-spacing:.1em;text-transform:uppercase;font-weight:400;}
+    .login-title{font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:.4rem;}
+    .login-sub{font-size:.82rem;color:rgba(255,255,255,0.5);margin-bottom:1.75rem;}
+    .login-field{margin-bottom:1.1rem;position:relative;}
+    .login-field input{
+      width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);
+      border-radius:10px;padding:.85rem 1rem .85rem 2.8rem;
+      font-size:.9rem;color:#fff;outline:none;transition:.3s;
+    }
+    .login-field input::placeholder{color:rgba(255,255,255,0.3);}
+    .login-field input:focus{border-color:var(--gold);background:rgba(255,255,255,0.10);}
+    .login-field i{position:absolute;left:.95rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,0.35);font-size:.9rem;}
+    .login-btn{
+      width:100%;background:linear-gradient(135deg,var(--gold-l),var(--gold),var(--gold-d));
+      color:#1a1200;padding:.9rem;border-radius:10px;font-size:.95rem;font-weight:700;
+      cursor:pointer;border:none;transition:.3s;box-shadow:0 4px 20px rgba(201,162,39,0.3);
+      margin-top:.5rem;
+    }
+    .login-btn:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(201,162,39,0.4);}
+    .login-error{
+      background:rgba(198,40,40,0.15);border:1px solid rgba(198,40,40,0.3);
+      color:#ff8a80;font-size:.82rem;padding:.65rem 1rem;border-radius:8px;
+      margin-top:.75rem;display:none;text-align:center;
+    }
+    .login-error.show{display:block;}
+
+    /* ── LAYOUT ───────────────────────────────────── */
+    #app{display:none;}
+    .admin-layout{display:flex;min-height:100vh;}
+
+    /* ── SIDEBAR ──────────────────────────────────── */
+    .sidebar{
+      width:var(--sidebar);flex-shrink:0;
+      background:linear-gradient(180deg,#03100a 0%,#041708 100%);
+      display:flex;flex-direction:column;
+      position:fixed;top:0;left:0;bottom:0;
+      z-index:100;border-right:1px solid rgba(201,162,39,0.1);
+      transition:transform .3s ease;
+    }
+    .sidebar-logo{
+      display:flex;align-items:center;gap:.7rem;
+      padding:1.5rem 1.25rem;
+      border-bottom:1px solid rgba(255,255,255,0.06);
+    }
+    .sidebar-logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--green-l),var(--gold));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+    .sidebar-logo-text{font-size:.95rem;font-weight:700;color:#fff;line-height:1.1;}
+    .sidebar-logo-text span{display:block;font-size:.55rem;color:var(--gold-l);letter-spacing:.08em;text-transform:uppercase;font-weight:400;}
+    .sidebar-badge{
+      margin:1rem 1.25rem .5rem;
+      background:rgba(201,162,39,0.12);border:1px solid rgba(201,162,39,0.2);
+      border-radius:8px;padding:.5rem .75rem;
+      font-size:.7rem;color:var(--gold-l);font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    }
+
+    .sidebar-nav{flex:1;padding:.5rem 0;overflow-y:auto;}
+    .sidebar-nav a{
+      display:flex;align-items:center;gap:.75rem;
+      padding:.75rem 1.25rem;color:rgba(255,255,255,0.55);
+      font-size:.88rem;font-weight:500;transition:.25s;
+      border-left:3px solid transparent;cursor:pointer;
+      position:relative;
+    }
+    .sidebar-nav a:hover{color:rgba(255,255,255,0.9);background:rgba(255,255,255,0.04);}
+    .sidebar-nav a.active{
+      color:#fff;background:rgba(10,92,54,0.35);
+      border-left-color:var(--gold);
+    }
+    .sidebar-nav a i{width:20px;text-align:center;font-size:.95rem;}
+    .sidebar-nav .nav-badge{
+      position:absolute;right:1rem;top:50%;transform:translateY(-50%);
+      background:var(--red);color:#fff;font-size:.65rem;font-weight:700;
+      padding:.15rem .45rem;border-radius:99px;min-width:18px;text-align:center;
+    }
+    .sidebar-divider{height:1px;background:rgba(255,255,255,0.06);margin:.5rem 1.25rem;}
+
+    .sidebar-bottom{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,255,0.06);}
+    .logout-btn{
+      display:flex;align-items:center;gap:.65rem;
+      color:rgba(255,255,255,0.45);font-size:.85rem;
+      cursor:pointer;transition:.25s;padding:.5rem 0;
+    }
+    .logout-btn:hover{color:#ff8a80;}
+
+    /* ── TOPBAR ───────────────────────────────────── */
+    .main-content{
+      margin-left:var(--sidebar);flex:1;
+      display:flex;flex-direction:column;min-height:100vh;
+    }
+    .topbar{
+      background:var(--white);border-bottom:1px solid var(--border);
+      padding:.85rem 1.75rem;
+      display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:50;
+      box-shadow:0 1px 8px rgba(0,0,0,0.06);
+    }
+    .topbar-title{font-size:1.05rem;font-weight:700;color:var(--text);}
+    .topbar-actions{display:flex;align-items:center;gap:.75rem;}
+    .topbar-admin{
+      display:flex;align-items:center;gap:.6rem;
+      font-size:.82rem;color:var(--muted);
+    }
+    .topbar-admin-avatar{
+      width:34px;height:34px;background:linear-gradient(135deg,var(--green-l),var(--green-d));
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      color:#fff;font-size:.8rem;font-weight:700;
+    }
+
+    /* ── PAGE CONTENT ─────────────────────────────── */
+    .page-content{padding:1.75rem;flex:1;}
+    .section{display:none;}
+    .section.active{display:block;}
+
+    /* ── CARDS ────────────────────────────────────── */
+    .card{background:var(--white);border-radius:14px;border:1px solid var(--border);box-shadow:0 2px 8px rgba(0,0,0,0.04);}
+    .card-header{
+      padding:1.1rem 1.5rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .card-title{font-size:.95rem;font-weight:700;}
+    .card-body{padding:1.5rem;}
+
+    /* ── STAT CARDS ───────────────────────────────── */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-bottom:1.75rem;}
+    .stat-box{
+      background:var(--white);border-radius:14px;border:1px solid var(--border);
+      padding:1.4rem 1.5rem;display:flex;align-items:center;gap:1rem;
+      box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:.3s;
+    }
+    .stat-box:hover{box-shadow:0 6px 20px rgba(0,0,0,0.08);transform:translateY(-2px);}
+    .stat-box-icon{
+      width:50px;height:50px;border-radius:12px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;font-size:1.4rem;
+    }
+    .stat-box-num{font-size:1.8rem;font-weight:800;line-height:1;}
+    .stat-box-label{font-size:.75rem;color:var(--muted);margin-top:.2rem;font-weight:500;}
+    .icon-green{background:rgba(10,92,54,0.1);color:var(--green);}
+    .icon-gold{background:rgba(201,162,39,0.12);color:var(--gold-d);}
+    .icon-red{background:rgba(198,40,40,0.10);color:var(--red);}
+    .icon-blue{background:rgba(21,101,192,0.10);color:var(--blue);}
+
+    /* ── BUTTONS ──────────────────────────────────── */
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.2rem;border-radius:9px;font-size:.85rem;font-weight:600;cursor:pointer;border:none;transition:.25s;}
+    .btn-primary{background:linear-gradient(135deg,var(--green-l),var(--green-d));color:#fff;box-shadow:0 3px 12px rgba(10,92,54,0.25);}
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(10,92,54,0.35);}
+    .btn-gold{background:linear-gradient(135deg,var(--gold-l),var(--gold-d));color:#1a1200;font-weight:700;}
+    .btn-gold:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(201,162,39,0.35);}
+    .btn-danger{background:rgba(198,40,40,0.1);color:var(--red);border:1px solid rgba(198,40,40,0.2);}
+    .btn-danger:hover{background:var(--red);color:#fff;}
+    .btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--muted);}
+    .btn-outline:hover{border-color:var(--green);color:var(--green);}
+    .btn-sm{padding:.4rem .9rem;font-size:.78rem;border-radius:7px;}
+    .btn-icon{width:34px;height:34px;padding:0;justify-content:center;border-radius:8px;}
+
+    /* ── TABLE ────────────────────────────────────── */
+    .table-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    th{font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:.75rem 1rem;text-align:left;border-bottom:2px solid var(--border);}
+    td{padding:.75rem 1rem;font-size:.85rem;border-bottom:1px solid var(--border);vertical-align:middle;}
+    tr:last-child td{border-bottom:none;}
+    tr:hover td{background:rgba(10,92,54,0.025);}
+
+    /* ── BADGES ───────────────────────────────────── */
+    .tag{display:inline-flex;align-items:center;padding:.2rem .65rem;border-radius:99px;font-size:.72rem;font-weight:600;}
+    .tag-green{background:rgba(10,92,54,0.1);color:var(--green);}
+    .tag-gold{background:rgba(201,162,39,0.12);color:var(--gold-d);}
+    .tag-red{background:rgba(198,40,40,0.10);color:var(--red);}
+    .tag-blue{background:rgba(21,101,192,0.10);color:var(--blue);}
+    .tag-gray{background:rgba(0,0,0,0.06);color:#666;}
+    .tag-orange{background:rgba(230,81,0,0.10);color:var(--orange);}
+
+    /* ── FORM ─────────────────────────────────────── */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+    .form-group{display:flex;flex-direction:column;gap:.4rem;}
+    .form-group.full{grid-column:1/-1;}
+    label{font-size:.8rem;font-weight:600;color:var(--text);}
+    .form-input,.form-select,.form-textarea{
+      background:var(--bg);border:1.5px solid var(--border);border-radius:9px;
+      padding:.72rem 1rem;font-size:.88rem;color:var(--text);outline:none;transition:.25s;width:100%;
+    }
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--green);background:#fff;box-shadow:0 0 0 3px rgba(10,92,54,0.08);}
+    .form-textarea{min-height:90px;resize:vertical;}
+    .form-hint{font-size:.73rem;color:var(--muted);}
+    .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1rem;background:var(--bg);border-radius:9px;border:1px solid var(--border);}
+    .toggle-label{font-size:.85rem;font-weight:600;}
+    .toggle-sub{font-size:.75rem;color:var(--muted);}
+    .toggle{position:relative;width:44px;height:24px;flex-shrink:0;}
+    .toggle input{opacity:0;width:0;height:0;}
+    .slider{position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:24px;transition:.3s;}
+    .slider::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.3s;}
+    input:checked + .slider{background:var(--green);}
+    input:checked + .slider::before{transform:translateX(20px);}
+
+    /* ── MODAL ────────────────────────────────────── */
+    .modal-overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);
+      z-index:500;display:flex;align-items:center;justify-content:center;padding:1rem;
+      opacity:0;visibility:hidden;transition:.3s;
+    }
+    .modal-overlay.open{opacity:1;visibility:visible;}
+    .modal{
+      background:#fff;border-radius:18px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;
+      box-shadow:0 24px 72px rgba(0,0,0,0.2);
+      transform:scale(.95);transition:.3s;
+    }
+    .modal-overlay.open .modal{transform:scale(1);}
+    .modal-header{
+      padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .modal-title{font-size:1.05rem;font-weight:700;}
+    .modal-close{width:32px;height:32px;border:none;background:var(--bg);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.25s;}
+    .modal-close:hover{background:rgba(198,40,40,0.1);color:var(--red);}
+    .modal-body{padding:1.5rem;}
+    .modal-footer{padding:1rem 1.5rem;border-top:1px solid var(--border);display:flex;gap:.75rem;justify-content:flex-end;}
+
+    /* ── EMPTY STATE ──────────────────────────────── */
+    .empty-state{text-align:center;padding:4rem 2rem;color:var(--muted);}
+    .empty-state i{font-size:3rem;margin-bottom:1rem;opacity:.3;display:block;}
+    .empty-state h3{font-size:1rem;font-weight:600;margin-bottom:.5rem;color:var(--text);}
+    .empty-state p{font-size:.85rem;}
+
+    /* ── TOAST ────────────────────────────────────── */
+    .toast{
+      position:fixed;bottom:1.5rem;right:1.5rem;z-index:9999;
+      background:#fff;border-radius:12px;padding:.85rem 1.25rem;
+      display:flex;align-items:center;gap:.75rem;
+      box-shadow:0 8px 30px rgba(0,0,0,0.15);border:1px solid var(--border);
+      font-size:.85rem;font-weight:500;
+      transform:translateY(20px);opacity:0;transition:.4s;
+      max-width:340px;
+    }
+    .toast.show{transform:translateY(0);opacity:1;}
+    .toast.success i{color:var(--green);}
+    .toast.error i{color:var(--red);}
+    .toast.info i{color:var(--blue);}
+
+    /* ── RESPONSIVE ───────────────────────────────── */
+    @media(max-width:900px){
+      .stats-row{grid-template-columns:repeat(2,1fr);}
+      .form-grid{grid-template-columns:1fr;}
+      .form-group.full{grid-column:1/-1;}
+    }
+    @media(max-width:700px){
+      .sidebar{transform:translateX(-100%);width:80vw;}
+      .sidebar.open{transform:none;}
+      .main-content{margin-left:0;}
+      .stats-row{grid-template-columns:1fr 1fr;}
+      .menu-toggle{display:flex!important;}
+    }
+    .menu-toggle{display:none;width:36px;height:36px;border:1.5px solid var(--border);background:none;border-radius:8px;cursor:pointer;align-items:center;justify-content:center;font-size:1rem;}
+
+    /* ── SEARCH ───────────────────────────────────── */
+    .search-bar{display:flex;align-items:center;gap:.6rem;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;padding:.55rem 1rem;transition:.25s;}
+    .search-bar:focus-within{border-color:var(--green);background:#fff;}
+    .search-bar input{border:none;background:transparent;outline:none;font-size:.88rem;color:var(--text);flex:1;}
+    .search-bar i{color:var(--muted);}
+
+    /* ── ENQUIRY CARD ─────────────────────────────── */
+    .enquiry-card{background:var(--white);border-radius:12px;border:1px solid var(--border);padding:1.25rem;margin-bottom:1rem;transition:.25s;cursor:pointer;}
+    .enquiry-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);border-color:rgba(10,92,54,0.2);}
+    .enquiry-card.unread{border-left:3px solid var(--gold);}
+    .enquiry-card.unread .enq-name::after{content:'NEW';background:var(--gold);color:#1a1200;font-size:.6rem;font-weight:700;padding:.1rem .4rem;border-radius:4px;margin-left:.5rem;vertical-align:middle;}
+    .enq-name{font-weight:700;font-size:.95rem;}
+    .enq-meta{font-size:.78rem;color:var(--muted);margin-top:.25rem;display:flex;gap:1rem;flex-wrap:wrap;}
+    .enq-preview{font-size:.83rem;color:var(--text);margin-top:.6rem;opacity:.75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+    /* ── PRODUCT EMOJI DISPLAY ────────────────────── */
+    .prod-emoji{font-size:1.8rem;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:rgba(10,92,54,0.06);border-radius:10px;flex-shrink:0;}
+    .prod-info{display:flex;flex-direction:column;}
+    .prod-name{font-weight:700;font-size:.9rem;}
+    .prod-cat{font-size:.75rem;color:var(--muted);}
+  </style>
+</head>
+<body>
+
+<!-- ===================== LOGIN ===================== -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">🌿</div>
+      <div class="login-logo-text">KingFresh<span>Admin Portal</span></div>
+    </div>
+    <h2 class="login-title">Welcome back</h2>
+    <p class="login-sub">Sign in to manage your export business</p>
+    <form id="login-form" autocomplete="off">
+      <div class="login-field">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="admin-pass" placeholder="Admin password" autocomplete="new-password" required/>
+      </div>
+      <button type="submit" class="login-btn">
+        <i class="fas fa-sign-in-alt" style="margin-right:.5rem;"></i> Sign In
+      </button>
+      <div class="login-error" id="login-error">Incorrect password. Please try again.</div>
+    </form>
+  </div>
+</div>
+
+<!-- ===================== APP ===================== -->
+<div id="app">
+<div class="admin-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🌿</div>
+      <div class="sidebar-logo-text">KingFresh<span>Admin Panel</span></div>
+    </div>
+    <div class="sidebar-badge">Admin Controls</div>
+    <nav class="sidebar-nav">
+      <a class="active" data-section="dashboard" onclick="showSection('dashboard',this)">
+        <i class="fas fa-chart-line"></i> Dashboard
+      </a>
+      <a data-section="products" onclick="showSection('products',this)">
+        <i class="fas fa-seedling"></i> Products
+      </a>
+      <a data-section="enquiries" onclick="showSection('enquiries',this)">
+        <i class="fas fa-envelope"></i> Enquiries
+        <span class="nav-badge" id="enquiry-badge" style="display:none;">0</span>
+      </a>
+      <div class="sidebar-divider"></div>
+      <a data-section="settings" onclick="showSection('settings',this)">
+        <i class="fas fa-sliders-h"></i> Site Settings
+      </a>
+      <a data-section="backup" onclick="showSection('backup',this)">
+        <i class="fas fa-database"></i> Backup / Sync
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="logout-btn" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Sign Out
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-content">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:.75rem;">
+        <button class="menu-toggle" id="menu-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+        <div class="topbar-title" id="topbar-title">Dashboard</div>
+      </div>
+      <div class="topbar-actions">
+        <div class="topbar-admin">
+          <div class="topbar-admin-avatar">A</div>
+          <span>Admin</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="page-content">
+
+      <!-- ============== DASHBOARD ============== -->
+      <div class="section active" id="sec-dashboard">
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="stat-box-icon icon-green">🍎</div>
+            <div>
+              <div class="stat-box-num" id="stat-products">0</div>
+              <div class="stat-box-label">Active Products</div>
+            </div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-icon icon-gold">📩</div>
+            <div>
+              <div class="stat-box-num" id="stat-enquiries">0</div>
+              <div class="stat-box-label">Total Enquiries</div>
+            </div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-icon icon-red">🔔</div>
+            <div>
+              <div class="stat-box-num" id="stat-unread">0</div>
+              <div class="stat-box-label">Unread Enquiries</div>
+            </div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-icon icon-blue">🌍</div>
+            <div>
+              <div class="stat-box-num" id="stat-countries">0</div>
+              <div class="stat-box-label">Countries (settings)</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+          <!-- Recent Enquiries -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📩 Recent Enquiries</div>
+              <button class="btn btn-outline btn-sm" onclick="showSection('enquiries')">View All</button>
+            </div>
+            <div class="card-body" id="dash-enquiries-list">
+              <div class="empty-state" style="padding:2rem;">
+                <i class="fas fa-inbox"></i>
+                <p>No enquiries yet</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">⚡ Quick Actions</div></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:.75rem;">
+              <button class="btn btn-primary" onclick="openProductModal()" style="justify-content:flex-start;padding:.75rem 1rem;">
+                <i class="fas fa-plus"></i> Add New Product
+              </button>
+              <button class="btn btn-gold" onclick="showSection('settings')" style="justify-content:flex-start;padding:.75rem 1rem;">
+                <i class="fab fa-whatsapp"></i> Update WhatsApp Number
+              </button>
+              <button class="btn btn-outline" onclick="showSection('settings')" style="justify-content:flex-start;padding:.75rem 1rem;">
+                <i class="fas fa-phone"></i> Update Contact Info
+              </button>
+              <button class="btn btn-outline" onclick="window.open('index.html','_blank')" style="justify-content:flex-start;padding:.75rem 1rem;">
+                <i class="fas fa-external-link-alt"></i> View Live Website
+              </button>
+              <button class="btn btn-outline" onclick="showSection('backup')" style="justify-content:flex-start;padding:.75rem 1rem;">
+                <i class="fas fa-download"></i> Export / Backup Data
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== PRODUCTS ============== -->
+      <div class="section" id="sec-products">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;gap:1rem;flex-wrap:wrap;">
+          <div class="search-bar" style="flex:1;max-width:320px;">
+            <i class="fas fa-search"></i>
+            <input type="search" id="product-search" placeholder="Search products…" oninput="filterProducts()"/>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+            <select class="form-select" id="cat-filter" onchange="filterProducts()" style="width:auto;padding:.55rem .9rem;font-size:.85rem;">
+              <option value="all">All Categories</option>
+              <option value="Fruits">🍎 Fruits</option>
+              <option value="Vegetables">🥦 Vegetables</option>
+              <option value="Exotic">✨ Exotic</option>
+            </select>
+            <button class="btn btn-primary" onclick="openProductModal()">
+              <i class="fas fa-plus"></i> Add Product
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">All Products <span id="product-count" style="color:var(--muted);font-weight:400;font-size:.85rem;margin-left:.5rem;"></span></div>
+          </div>
+          <div class="table-wrap">
+            <table id="products-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Origin</th>
+                  <th>Availability</th>
+                  <th>Min Order</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="products-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== ENQUIRIES ============== -->
+      <div class="section" id="sec-enquiries">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:.75rem;">
+          <div class="search-bar" style="flex:1;max-width:320px;">
+            <i class="fas fa-search"></i>
+            <input type="search" id="enq-search" placeholder="Search enquiries…" oninput="filterEnquiries()"/>
+          </div>
+          <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+            <button class="btn btn-outline btn-sm" onclick="filterEnqByStatus('all')">All</button>
+            <button class="btn btn-outline btn-sm" onclick="filterEnqByStatus('unread')">🔔 Unread</button>
+            <button class="btn btn-danger btn-sm" onclick="clearAllEnquiries()"><i class="fas fa-trash"></i> Clear All</button>
+          </div>
+        </div>
+        <div id="enquiries-list"></div>
+      </div>
+
+      <!-- ============== SETTINGS ============== -->
+      <div class="section" id="sec-settings">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+
+          <!-- Contact Info -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">📞 Contact Information</div></div>
+            <div class="card-body">
+              <form id="settings-form" style="display:flex;flex-direction:column;gap:1rem;">
+                <div class="form-group">
+                  <label>Company Name</label>
+                  <input type="text" class="form-input" id="s-company" placeholder="KingFresh Trading Company"/>
+                </div>
+                <div class="form-group">
+                  <label>Tagline</label>
+                  <input type="text" class="form-input" id="s-tagline" placeholder="From Farm to the World"/>
+                </div>
+                <div class="form-group">
+                  <label>📞 Phone Number</label>
+                  <input type="text" class="form-input" id="s-phone" placeholder="+91 98765 43210"/>
+                </div>
+                <div class="form-group">
+                  <label>📱 WhatsApp Number <span style="color:var(--muted);font-size:.75rem;">(digits only, include country code)</span></label>
+                  <input type="text" class="form-input" id="s-whatsapp" placeholder="919876543210"/>
+                  <span class="form-hint">Example: 919876543210 (for +91 98765 43210)</span>
+                </div>
+                <div class="form-group">
+                  <label>WhatsApp Default Message</label>
+                  <input type="text" class="form-input" id="s-whatsappmsg" placeholder="Hello KingFresh! I'm interested in your products."/>
+                </div>
+                <div class="form-group">
+                  <label>📧 Email Address</label>
+                  <input type="email" class="form-input" id="s-email" placeholder="exports@kingfresh.com"/>
+                </div>
+                <div class="form-group">
+                  <label>📍 Office Address</label>
+                  <textarea class="form-textarea" id="s-address" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Contact Info</button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Stats & Year -->
+          <div style="display:flex;flex-direction:column;gap:1.25rem;">
+            <div class="card">
+              <div class="card-header"><div class="card-title">📊 Site Statistics</div></div>
+              <div class="card-body" style="display:flex;flex-direction:column;gap:.85rem;">
+                <div class="form-group">
+                  <label>Year Founded</label>
+                  <input type="text" class="form-input" id="s-founded" placeholder="2019"/>
+                </div>
+                <div class="form-group">
+                  <label>Years of Experience (shown on homepage)</label>
+                  <input type="text" class="form-input" id="s-yearsexp" placeholder="6+"/>
+                </div>
+                <div class="form-group">
+                  <label>Countries Exported To</label>
+                  <input type="text" class="form-input" id="s-countries" placeholder="50+"/>
+                </div>
+                <div class="form-group">
+                  <label>Metric Tons / Year</label>
+                  <input type="text" class="form-input" id="s-tons" placeholder="10,000+"/>
+                </div>
+                <div class="form-group">
+                  <label>Happy Clients</label>
+                  <input type="text" class="form-input" id="s-clients" placeholder="500+"/>
+                </div>
+                <div class="form-group">
+                  <label>Customer Satisfaction</label>
+                  <input type="text" class="form-input" id="s-satisfaction" placeholder="99%"/>
+                </div>
+                <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save Statistics</button>
+              </div>
+            </div>
+
+            <!-- Change Password -->
+            <div class="card">
+              <div class="card-header"><div class="card-title">🔐 Change Admin Password</div></div>
+              <div class="card-body">
+                <form id="pass-form" style="display:flex;flex-direction:column;gap:.85rem;">
+                  <div class="form-group">
+                    <label>Current Password</label>
+                    <input type="password" class="form-input" id="pass-current" placeholder="Current password"/>
+                  </div>
+                  <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" class="form-input" id="pass-new" placeholder="New password"/>
+                  </div>
+                  <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" class="form-input" id="pass-confirm" placeholder="Confirm new password"/>
+                  </div>
+                  <button type="submit" class="btn btn-primary"><i class="fas fa-key"></i> Update Password</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============== BACKUP ============== -->
+      <div class="section" id="sec-backup">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+          <div class="card">
+            <div class="card-header"><div class="card-title">⬇️ Export / Download Backup</div></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:1rem;">
+              <p style="font-size:.88rem;color:var(--muted);line-height:1.7;">Download all your data (products, settings, enquiries) as a JSON file. Store it safely or use it to restore on another device.</p>
+              <button class="btn btn-primary" onclick="exportData()"><i class="fas fa-download"></i> Download Backup File</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">⬆️ Import / Restore Data</div></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:1rem;">
+              <p style="font-size:.88rem;color:var(--muted);line-height:1.7;">Restore from a previously exported backup file. This will <strong>replace all current data</strong>. Make sure to export first.</p>
+              <label style="display:flex;align-items:center;gap:.75rem;padding:.9rem 1rem;background:var(--bg);border:1.5px dashed var(--border);border-radius:10px;cursor:pointer;font-size:.88rem;font-weight:500;transition:.25s;" id="import-label">
+                <i class="fas fa-file-import" style="color:var(--green);"></i> Choose backup file (.json)
+                <input type="file" accept=".json" id="import-file" style="display:none;" onchange="importData(this)"/>
+              </label>
+            </div>
+          </div>
+          <div class="card" style="grid-column:1/-1;">
+            <div class="card-header"><div class="card-title">🔄 Cross-Device Sync</div></div>
+            <div class="card-body">
+              <p style="font-size:.88rem;color:var(--muted);line-height:1.8;margin-bottom:1rem;">
+                Data is currently saved to <strong>this browser's storage</strong>. To sync across devices or computers:
+              </p>
+              <ol style="font-size:.87rem;line-height:2;padding-left:1.2rem;color:var(--text);">
+                <li>Click <strong>"Download Backup File"</strong> on this device</li>
+                <li>Open the admin panel on the other device</li>
+                <li>Click <strong>"Import / Restore"</strong> and select the downloaded file</li>
+              </ol>
+              <div style="margin-top:1rem;padding:.9rem 1rem;background:rgba(10,92,54,0.06);border-radius:10px;border-left:3px solid var(--green);">
+                <p style="font-size:.83rem;color:var(--text);"><strong>Tip:</strong> For automatic real-time sync across all devices, upgrade to Firebase (free). Ask your developer — takes about 15 minutes to set up.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /page-content -->
+  </div><!-- /main-content -->
+</div><!-- /admin-layout -->
+</div><!-- /app -->
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <i class="fas fa-check-circle"></i>
+  <span id="toast-msg">Saved!</span>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Add New Product</div>
+      <button class="modal-close" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-product-id"/>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Product Name *</label>
+          <input type="text" class="form-input" id="p-name" placeholder="e.g. Alphonso Mango"/>
+        </div>
+        <div class="form-group">
+          <label>Emoji Icon *</label>
+          <input type="text" class="form-input" id="p-emoji" placeholder="🥭" maxlength="4" style="font-size:1.5rem;"/>
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select class="form-select" id="p-category">
+            <option value="Fruits">🍎 Fruits</option>
+            <option value="Vegetables">🥦 Vegetables</option>
+            <option value="Exotic">✨ Exotic</option>
+            <option value="Herbs">🌿 Herbs & Aromatics</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Badge / Label <span class="form-hint">(optional)</span></label>
+          <input type="text" class="form-input" id="p-badge" placeholder="e.g. Bestseller, New, Premium"/>
+        </div>
+        <div class="form-group">
+          <label>Origin / Region *</label>
+          <input type="text" class="form-input" id="p-origin" placeholder="e.g. Ratnagiri, Maharashtra"/>
+        </div>
+        <div class="form-group">
+          <label>Availability / Season *</label>
+          <input type="text" class="form-input" id="p-availability" placeholder="e.g. April – June / Year Round"/>
+        </div>
+        <div class="form-group">
+          <label>Minimum Order Quantity</label>
+          <input type="text" class="form-input" id="p-minorder" placeholder="e.g. 1 MT, 500 kg, 1000 pcs"/>
+        </div>
+        <div class="form-group">
+          <label>Tags <span class="form-hint">(comma-separated)</span></label>
+          <input type="text" class="form-input" id="p-tags" placeholder="GI Tagged, Export Grade A, Year Round"/>
+        </div>
+        <div class="form-group full">
+          <label>Short Description</label>
+          <textarea class="form-textarea" id="p-desc" placeholder="Describe the product, quality, and key export features…"></textarea>
+        </div>
+        <div class="form-group full">
+          <div class="toggle-row">
+            <div>
+              <div class="toggle-label">Active / Visible on Website</div>
+              <div class="toggle-sub">Toggle off to hide without deleting</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="p-active" checked/>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeProductModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProduct()"><i class="fas fa-save"></i> Save Product</button>
+    </div>
+  </div>
+</div>
+
+<!-- ENQUIRY DETAIL MODAL -->
+<div class="modal-overlay" id="enquiry-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">📩 Enquiry Details</div>
+      <button class="modal-close" onclick="closeEnqModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="enquiry-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-danger btn-sm" id="enq-delete-btn">🗑 Delete</button>
+      <button class="btn btn-outline" onclick="closeEnqModal()">Close</button>
+      <button class="btn btn-gold" id="enq-reply-btn"><i class="fab fa-whatsapp"></i> Reply on WhatsApp</button>
+      <button class="btn btn-primary" id="enq-email-btn"><i class="fas fa-envelope"></i> Reply by Email</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/kf-data.js"></script>
+<script>
+/* =====================================================
+   ADMIN PANEL LOGIC
+   ===================================================== */
+
+/* ── AUTH ─────────────────────────────────────────── */
+const SESSION_KEY = "kf_admin_session";
+
+async function checkSession() {
+  const s = sessionStorage.getItem(SESSION_KEY);
+  if (s === "1") showApp();
+}
+
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const pass = document.getElementById("admin-pass").value;
+  const ok = await KFData.verifyPassword(pass);
+  if (ok) {
+    sessionStorage.setItem(SESSION_KEY, "1");
+    showApp();
+  } else {
+    document.getElementById("login-error").classList.add("show");
+    document.getElementById("admin-pass").value = "";
+    setTimeout(() => document.getElementById("login-error").classList.remove("show"), 3000);
+  }
+});
+
+function showApp() {
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("app").style.display = "block";
+  initApp();
+}
+
+function logout() {
+  if (!confirm("Sign out of admin panel?")) return;
+  sessionStorage.removeItem(SESSION_KEY);
+  location.reload();
+}
+
+/* ── NAVIGATION ───────────────────────────────────── */
+const SECTION_TITLES = {
+  dashboard:"Dashboard", products:"Products",
+  enquiries:"Enquiries", settings:"Site Settings", backup:"Backup & Sync"
+};
+
+function showSection(name, el) {
+  document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".sidebar-nav a").forEach(a => a.classList.remove("active"));
+  document.getElementById("sec-" + name).classList.add("active");
+  if (el) el.classList.add("active");
+  else document.querySelector(`[data-section="${name}"]`)?.classList.add("active");
+  document.getElementById("topbar-title").textContent = SECTION_TITLES[name] || name;
+  // Close mobile sidebar
+  document.getElementById("sidebar").classList.remove("open");
+}
+
+function toggleSidebar() {
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+/* ── INIT ─────────────────────────────────────────── */
+function initApp() {
+  loadDashboard();
+  renderProductsTable();
+  renderEnquiries();
+  loadSettings();
+}
+
+/* ── DASHBOARD ────────────────────────────────────── */
+function loadDashboard() {
+  const products  = KFData.getProducts();
+  const enquiries = KFData.getEnquiries();
+  const unread    = enquiries.filter(e => !e.read);
+  const settings  = KFData.getSettings();
+
+  document.getElementById("stat-products").textContent  = products.length;
+  document.getElementById("stat-enquiries").textContent = enquiries.length;
+  document.getElementById("stat-unread").textContent    = unread.length;
+  document.getElementById("stat-countries").textContent = settings.countries || "50+";
+
+  // Badge
+  const badge = document.getElementById("enquiry-badge");
+  if (unread.length > 0) { badge.textContent = unread.length; badge.style.display = "flex"; }
+  else badge.style.display = "none";
+
+  // Recent enquiries list
+  const container = document.getElementById("dash-enquiries-list");
+  if (enquiries.length === 0) {
+    container.innerHTML = `<div class="empty-state" style="padding:2rem;"><i class="fas fa-inbox"></i><p>No enquiries yet</p></div>`;
+    return;
+  }
+  container.innerHTML = enquiries.slice(0, 4).map(e => `
+    <div style="padding:.75rem 0;border-bottom:1px solid var(--border);cursor:pointer;" onclick="openEnquiry('${e.id}')">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-weight:600;font-size:.88rem;">${escHtml(e.name)} ${!e.read ? '<span style="background:var(--gold);color:#1a1200;font-size:.6rem;font-weight:700;padding:.1rem .4rem;border-radius:4px;margin-left:.4rem;">NEW</span>' : ''}</div>
+        <div style="font-size:.72rem;color:var(--muted);">${formatAgo(e.date)}</div>
+      </div>
+      <div style="font-size:.78rem;color:var(--muted);margin-top:.2rem;">${escHtml(e.company||'') || escHtml(e.email||'')}</div>
+    </div>
+  `).join("");
+}
+
+/* ── PRODUCTS ─────────────────────────────────────── */
+let allProducts = [];
+
+function renderProductsTable(filter = "all", search = "") {
+  allProducts = KFData.getAllProducts();
+  let list = allProducts;
+  if (filter !== "all") list = list.filter(p => p.category === filter);
+  if (search) {
+    const q = search.toLowerCase();
+    list = list.filter(p => p.name.toLowerCase().includes(q) || (p.origin||"").toLowerCase().includes(q));
+  }
+  document.getElementById("product-count").textContent = `(${list.length} product${list.length !== 1 ? "s" : ""})`;
+  const tbody = document.getElementById("products-tbody");
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state" style="padding:2rem;"><i class="fas fa-leaf"></i><p>No products found</p></div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = list.map(p => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <div class="prod-emoji">${p.emoji || "📦"}</div>
+          <div class="prod-info">
+            <div class="prod-name">${escHtml(p.name)}</div>
+            ${p.badge ? `<span class="tag tag-gold" style="font-size:.65rem;">${escHtml(p.badge)}</span>` : ""}
+          </div>
+        </div>
+      </td>
+      <td><span class="tag tag-green">${escHtml(p.category)}</span></td>
+      <td style="font-size:.82rem;color:var(--muted);">${escHtml(p.origin||"—")}</td>
+      <td style="font-size:.82rem;">${escHtml(p.availability||"—")}</td>
+      <td style="font-size:.82rem;">${escHtml(p.minOrder||"—")}</td>
+      <td>
+        <label class="toggle" title="${p.active ? 'Active':'Hidden'}">
+          <input type="checkbox" ${p.active ? "checked" : ""} onchange="toggleProductActive('${p.id}', this.checked)"/>
+          <span class="slider"></span>
+        </label>
+      </td>
+      <td>
+        <div style="display:flex;gap:.5rem;">
+          <button class="btn btn-outline btn-icon btn-sm" onclick="openProductModal('${p.id}')" title="Edit"><i class="fas fa-edit"></i></button>
+          <button class="btn btn-danger btn-icon btn-sm" onclick="confirmDeleteProduct('${p.id}','${escHtml(p.name)}')" title="Delete"><i class="fas fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function filterProducts() {
+  const search = document.getElementById("product-search").value;
+  const cat    = document.getElementById("cat-filter").value;
+  renderProductsTable(cat, search);
+}
+
+function toggleProductActive(id, active) {
+  KFData.updateProduct(id, { active });
+  showToast(active ? "Product is now visible on website ✅" : "Product hidden from website 🚫", "info");
+  loadDashboard();
+}
+
+function confirmDeleteProduct(id, name) {
+  if (!confirm(`Delete "${name}"?\n\nThis cannot be undone.`)) return;
+  KFData.deleteProduct(id);
+  renderProductsTable();
+  loadDashboard();
+  showToast("Product deleted", "error");
+}
+
+/* ── PRODUCT MODAL ────────────────────────────────── */
+function openProductModal(id) {
+  document.getElementById("product-modal").classList.add("open");
+  document.getElementById("edit-product-id").value = "";
+  // Clear fields
+  ["p-name","p-emoji","p-badge","p-origin","p-availability","p-minorder","p-tags","p-desc"]
+    .forEach(f => document.getElementById(f).value = "");
+  document.getElementById("p-category").value = "Fruits";
+  document.getElementById("p-active").checked = true;
+  document.getElementById("modal-title").textContent = "Add New Product";
+
+  if (id) {
+    const p = allProducts.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById("modal-title").textContent = "Edit Product";
+    document.getElementById("edit-product-id").value = id;
+    document.getElementById("p-name").value         = p.name || "";
+    document.getElementById("p-emoji").value        = p.emoji || "";
+    document.getElementById("p-category").value     = p.category || "Fruits";
+    document.getElementById("p-badge").value        = p.badge || "";
+    document.getElementById("p-origin").value       = p.origin || "";
+    document.getElementById("p-availability").value = p.availability || "";
+    document.getElementById("p-minorder").value     = p.minOrder || "";
+    document.getElementById("p-tags").value         = Array.isArray(p.tags) ? p.tags.join(", ") : (p.tags || "");
+    document.getElementById("p-desc").value         = p.desc || "";
+    document.getElementById("p-active").checked     = p.active !== false;
+  }
+}
+
+function closeProductModal() {
+  document.getElementById("product-modal").classList.remove("open");
+}
+
+function saveProduct() {
+  const name = document.getElementById("p-name").value.trim();
+  const emoji = document.getElementById("p-emoji").value.trim();
+  if (!name) { showToast("Product name is required", "error"); return; }
+
+  const data = {
+    name,
+    emoji:        emoji || "📦",
+    category:     document.getElementById("p-category").value,
+    badge:        document.getElementById("p-badge").value.trim(),
+    origin:       document.getElementById("p-origin").value.trim(),
+    availability: document.getElementById("p-availability").value.trim(),
+    minOrder:     document.getElementById("p-minorder").value.trim(),
+    tags:         document.getElementById("p-tags").value.split(",").map(t => t.trim()).filter(Boolean),
+    desc:         document.getElementById("p-desc").value.trim(),
+    active:       document.getElementById("p-active").checked
+  };
+
+  const editId = document.getElementById("edit-product-id").value;
+  if (editId) {
+    KFData.updateProduct(editId, data);
+    showToast("Product updated ✅");
+  } else {
+    KFData.addProduct(data);
+    showToast("Product added ✅");
+  }
+  closeProductModal();
+  renderProductsTable();
+  loadDashboard();
+}
+
+/* ── ENQUIRIES ────────────────────────────────────── */
+let currentEnqFilter = "all";
+
+function renderEnquiries(filter = currentEnqFilter, search = "") {
+  currentEnqFilter = filter;
+  let list = KFData.getEnquiries();
+  if (filter === "unread") list = list.filter(e => !e.read);
+  if (search) {
+    const q = search.toLowerCase();
+    list = list.filter(e =>
+      (e.name||"").toLowerCase().includes(q) ||
+      (e.email||"").toLowerCase().includes(q) ||
+      (e.company||"").toLowerCase().includes(q)
+    );
+  }
+  const container = document.getElementById("enquiries-list");
+  if (list.length === 0) {
+    container.innerHTML = `<div class="empty-state"><i class="fas fa-inbox"></i><h3>No enquiries found</h3><p>Quote requests submitted via the website contact form will appear here.</p></div>`;
+    return;
+  }
+  container.innerHTML = list.map(e => `
+    <div class="enquiry-card ${!e.read ? 'unread' : ''}" onclick="openEnquiry('${e.id}')">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem;">
+        <div class="enq-name">${escHtml(e.name||"Unknown")}</div>
+        <div style="font-size:.75rem;color:var(--muted);">${formatDate(e.date)}</div>
+      </div>
+      <div class="enq-meta">
+        ${e.company ? `<span>🏢 ${escHtml(e.company)}</span>` : ""}
+        ${e.email   ? `<span>📧 ${escHtml(e.email)}</span>` : ""}
+        ${e.phone   ? `<span>📞 ${escHtml(e.phone)}</span>` : ""}
+        ${e.country ? `<span>🌍 ${escHtml(e.country)}</span>` : ""}
+      </div>
+      ${e.message ? `<div class="enq-preview">${escHtml(e.message)}</div>` : ""}
+    </div>
+  `).join("");
+}
+
+function filterEnquiries() {
+  renderEnquiries(currentEnqFilter, document.getElementById("enq-search").value);
+}
+
+function filterEnqByStatus(status) {
+  renderEnquiries(status);
+}
+
+let currentEnqId = null;
+
+function openEnquiry(id) {
+  const e = KFData.getEnquiries().find(x => x.id === id);
+  if (!e) return;
+  currentEnqId = id;
+  KFData.markEnquiryRead(id);
+  renderEnquiries();
+  loadDashboard();
+
+  const settings = KFData.getSettings();
+  const waNum = settings.whatsapp || "919876543210";
+  const waMsg = encodeURIComponent(`Hello ${e.name}, thank you for your enquiry about ${e.product || 'our products'}. `);
+  const emailSubject = encodeURIComponent(`Re: Your enquiry – KingFresh Trading`);
+
+  document.getElementById("enquiry-modal-body").innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.25rem;">
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Name</div><div style="font-weight:600;">${escHtml(e.name||"—")}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Company</div><div style="font-weight:600;">${escHtml(e.company||"—")}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Email</div><div style="font-weight:600;">${escHtml(e.email||"—")}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Phone</div><div style="font-weight:600;">${escHtml(e.phone||"—")}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Country</div><div style="font-weight:600;">${escHtml(e.country||"—")}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Product Interest</div><div style="font-weight:600;">${escHtml(e.product||"—")}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Quantity</div><div style="font-weight:600;">${escHtml(e.quantity||"—")}</div></div>
+      <div><div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Received</div><div style="font-weight:600;">${formatDate(e.date)}</div></div>
+    </div>
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;border-left:3px solid var(--green);">
+      <div style="font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem;">Message</div>
+      <div style="font-size:.9rem;line-height:1.7;">${escHtml(e.message||"No message provided.")}</div>
+    </div>
+  `;
+
+  document.getElementById("enq-reply-btn").href   = `https://wa.me/${waNum}?text=${waMsg}`;
+  document.getElementById("enq-reply-btn").target = "_blank";
+  document.getElementById("enq-email-btn").href   = `mailto:${e.email}?subject=${emailSubject}`;
+  document.getElementById("enq-delete-btn").onclick = () => deleteEnquiry(id);
+
+  document.getElementById("enquiry-modal").classList.add("open");
+}
+
+function closeEnqModal() {
+  document.getElementById("enquiry-modal").classList.remove("open");
+  currentEnqId = null;
+}
+
+function deleteEnquiry(id) {
+  if (!confirm("Delete this enquiry?")) return;
+  KFData.deleteEnquiry(id);
+  closeEnqModal();
+  renderEnquiries();
+  loadDashboard();
+  showToast("Enquiry deleted", "error");
+}
+
+function clearAllEnquiries() {
+  if (!confirm("Delete ALL enquiries? This cannot be undone.")) return;
+  localStorage.setItem("kf_enquiries", "[]");
+  renderEnquiries();
+  loadDashboard();
+  showToast("All enquiries cleared", "info");
+}
+
+/* ── SETTINGS ─────────────────────────────────────── */
+function loadSettings() {
+  const s = KFData.getSettings();
+  document.getElementById("s-company").value      = s.companyName    || "";
+  document.getElementById("s-tagline").value      = s.tagline        || "";
+  document.getElementById("s-phone").value        = s.phone          || "";
+  document.getElementById("s-whatsapp").value     = s.whatsapp       || "";
+  document.getElementById("s-whatsappmsg").value  = s.whatsappMsg    || "";
+  document.getElementById("s-email").value        = s.email          || "";
+  document.getElementById("s-address").value      = s.address        || "";
+  document.getElementById("s-founded").value      = s.yearFounded    || "2019";
+  document.getElementById("s-yearsexp").value     = s.yearsExp       || "6+";
+  document.getElementById("s-countries").value    = s.countries      || "50+";
+  document.getElementById("s-tons").value         = s.tonsYear       || "10,000+";
+  document.getElementById("s-clients").value      = s.clients        || "500+";
+  document.getElementById("s-satisfaction").value = s.satisfaction   || "99%";
+}
+
+document.getElementById("settings-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  saveSettings();
+});
+
+function saveSettings() {
+  const current = KFData.getSettings();
+  KFData.saveSettings({
+    ...current,
+    companyName:  document.getElementById("s-company").value.trim(),
+    tagline:      document.getElementById("s-tagline").value.trim(),
+    phone:        document.getElementById("s-phone").value.trim(),
+    whatsapp:     document.getElementById("s-whatsapp").value.replace(/\D/g,""),
+    whatsappMsg:  document.getElementById("s-whatsappmsg").value.trim(),
+    email:        document.getElementById("s-email").value.trim(),
+    address:      document.getElementById("s-address").value.trim(),
+    yearFounded:  document.getElementById("s-founded").value.trim(),
+    yearsExp:     document.getElementById("s-yearsexp").value.trim(),
+    countries:    document.getElementById("s-countries").value.trim(),
+    tonsYear:     document.getElementById("s-tons").value.trim(),
+    clients:      document.getElementById("s-clients").value.trim(),
+    satisfaction: document.getElementById("s-satisfaction").value.trim(),
+  });
+  loadDashboard();
+  showToast("Settings saved ✅");
+}
+
+/* ── CHANGE PASSWORD ──────────────────────────────── */
+document.getElementById("pass-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const current = document.getElementById("pass-current").value;
+  const nw      = document.getElementById("pass-new").value;
+  const confirm = document.getElementById("pass-confirm").value;
+  if (!await KFData.verifyPassword(current)) { showToast("Current password is incorrect", "error"); return; }
+  if (nw.length < 8)  { showToast("New password must be at least 8 characters", "error"); return; }
+  if (nw !== confirm) { showToast("Passwords do not match", "error"); return; }
+  await KFData.setPassword(nw);
+  showToast("Password updated ✅");
+  document.getElementById("pass-form").reset();
+});
+
+/* ── BACKUP ───────────────────────────────────────── */
+function exportData() { KFData.exportData(); showToast("Backup downloaded ✅"); }
+
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      KFData.importData(e.target.result);
+      showToast("Data imported & restored ✅");
+      initApp();
+    } catch {
+      showToast("Invalid backup file", "error");
+    }
+    input.value = "";
+  };
+  reader.readAsText(file);
+}
+
+/* ── TOAST ────────────────────────────────────────── */
+function showToast(msg, type = "success") {
+  const toast = document.getElementById("toast");
+  const icons = { success:"fa-check-circle", error:"fa-times-circle", info:"fa-info-circle" };
+  toast.className = `toast ${type}`;
+  toast.querySelector("i").className = `fas ${icons[type]||icons.success}`;
+  document.getElementById("toast-msg").textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3000);
+}
+
+/* ── UTILS ────────────────────────────────────────── */
+function escHtml(str) {
+  if (!str) return "";
+  return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function formatDate(iso) {
+  if (!iso) return "–";
+  return new Date(iso).toLocaleDateString("en-GB", { day:"2-digit", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit" });
+}
+function formatAgo(iso) {
+  if (!iso) return "";
+  const diff = (Date.now() - new Date(iso)) / 1000;
+  if (diff < 60) return "just now";
+  if (diff < 3600) return Math.floor(diff/60) + "m ago";
+  if (diff < 86400) return Math.floor(diff/3600) + "h ago";
+  return Math.floor(diff/86400) + "d ago";
+}
+
+/* ── CLOSE MODALS ON OVERLAY CLICK ───────────────── */
+document.querySelectorAll(".modal-overlay").forEach(overlay => {
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) {
+      overlay.classList.remove("open");
+      currentEnqId = null;
+    }
+  });
+});
+
+/* ── START ────────────────────────────────────────── */
+checkSession();
+</script>
+</body>
+</html>

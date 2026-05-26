@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="KingFresh Product Catalog — Premium fresh fruits and vegetables for export. Mangoes, grapes, onions, garlic, and 50+ more products sourced from India's finest farms."/>
+  <title>Products | KingFresh Trading Company</title>
+  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous"/>
+  <meta name="theme-color" content="#0a5c36"/>
+</head>
+<body>
+
+<div id="progress-bar" aria-hidden="true"></div>
+<div id="preloader" role="status">
+  <div class="preloader-inner">
+    <div class="preloader-logo">King<span>Fresh</span></div>
+    <div class="preloader-bar"><div class="preloader-bar-fill"></div></div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar transparent" aria-label="Main Navigation">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="nav-logo-icon">🌿</div>
+      <div class="nav-logo-text">KingFresh<span>Trading Company</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html"    class="nav-link">Home</a></li>
+      <li><a href="about.html"    class="nav-link">About</a></li>
+      <li><a href="products.html" class="nav-link active">Products</a></li>
+      <li><a href="about.html#quality" class="nav-link">Quality</a></li>
+      <li><a href="contact.html"  class="nav-link">Contact</a></li>
+    </ul>
+    <a href="contact.html" class="btn btn-secondary btn-sm nav-cta"><i class="fas fa-envelope"></i> Get Free Quote</a>
+    <button class="nav-hamburger" aria-label="Toggle Menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="about.html" class="nav-link">About</a>
+  <a href="products.html" class="nav-link">Products</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="contact.html" class="btn btn-secondary">Get Free Quote</a>
+</div>
+
+<!-- PAGE HERO -->
+<header class="page-hero" aria-labelledby="page-title">
+  <div class="container page-hero-inner">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">Products</span>
+    </nav>
+    <h1 class="page-hero-title" id="page-title">Our Product <br/>Catalog</h1>
+    <p class="page-hero-sub">50+ premium fresh fruits and vegetables sourced from India's finest certified farms — available year-round.</p>
+  </div>
+</header>
+
+<!-- PRODUCTS MAIN -->
+<section class="products-section section-pad" aria-labelledby="products-main-title">
+  <div class="container" id="kf-catalog-wrapper">
+    <div class="text-center reveal" style="margin-bottom:2.5rem;">
+      <h2 class="section-title" id="products-main-title">Complete <span>Product Range</span></h2>
+      <div class="divider center"></div>
+      <p class="section-sub">Browse our complete catalog. All products available for export with full certifications and documentation.</p>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="products-filter-bar reveal">
+      <div class="filter-search">
+        <i class="fas fa-search filter-search-icon" aria-hidden="true"></i>
+        <input type="search" placeholder="Search products (e.g. mango, onion, grapes)…" aria-label="Search products"/>
+      </div>
+      <div class="products-tabs" role="tablist" style="margin:0;">
+        <button class="tab-btn active" data-tab="all">All</button>
+        <button class="tab-btn" data-tab="fruits">🍎 Fruits</button>
+        <button class="tab-btn" data-tab="vegetables">🥦 Vegetables</button>
+        <button class="tab-btn" data-tab="exotic">✨ Exotic</button>
+        <button class="tab-btn" data-tab="herbs">🌿 Herbs</button>
+      </div>
+    </div>
+
+    <!-- Product groups below — replaced dynamically if admin has saved products -->
+    <div id="kf-catalog">
+
+    <!-- ===== FRUITS ===== -->
+    <div data-group="fruits" role="list">
+      <h3 style="font-family:var(--font-heading);font-size:1.5rem;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid var(--clr-border);color:var(--clr-text);">
+        🍎 Fresh Fruits
+      </h3>
+      <div class="products-grid">
+        <article class="product-card reveal stagger-1" role="listitem">
+          <div class="product-card-img">🥭<span class="product-card-badge">Bestseller</span></div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Alphonso Mango</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Ratnagiri, Maharashtra</div>
+            <div class="product-card-tags"><span class="product-tag">GI Tagged</span><span class="product-tag">Grade A</span><span class="product-tag">Apr–Jun</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-2" role="listitem">
+          <div class="product-card-img">🥭</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Kesar Mango</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Saurashtra, Gujarat</div>
+            <div class="product-card-tags"><span class="product-tag">GI Tagged</span><span class="product-tag">May–Jul</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-3" role="listitem">
+          <div class="product-card-img">🍇<span class="product-card-badge">Premium</span></div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Thompson Seedless Grapes</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Nashik, Maharashtra</div>
+            <div class="product-card-tags"><span class="product-tag">Green</span><span class="product-tag">17–18 Brix</span><span class="product-tag">Jan–Apr</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-4" role="listitem">
+          <div class="product-card-img">🍇</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Red Globe Grapes</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Nashik, Maharashtra</div>
+            <div class="product-card-tags"><span class="product-tag">Red</span><span class="product-tag">Seeded</span><span class="product-tag">Feb–Apr</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-5" role="listitem">
+          <div class="product-card-img">🍎</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Kashmiri Apple</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Kashmir Valley</div>
+            <div class="product-card-tags"><span class="product-tag">Royal Delicious</span><span class="product-tag">Sep–Nov</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-6" role="listitem">
+          <div class="product-card-img">🍊</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Nagpur Orange</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Nagpur, Maharashtra</div>
+            <div class="product-card-tags"><span class="product-tag">GI Tagged</span><span class="product-tag">Nov–Jan</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-1" role="listitem">
+          <div class="product-card-img">🍌</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Cavendish Banana</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Jalgaon, Maharashtra</div>
+            <div class="product-card-tags"><span class="product-tag">Grade A</span><span class="product-tag">Year Round</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-2" role="listitem">
+          <div class="product-card-img">🍑<span class="product-card-badge">High Demand</span></div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Pomegranate</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Solapur, Maharashtra</div>
+            <div class="product-card-tags"><span class="product-tag">Bhagwa</span><span class="product-tag">Arakta</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-3" role="listitem">
+          <div class="product-card-img">🍈</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Guava</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Allahabad, UP</div>
+            <div class="product-card-tags"><span class="product-tag">Allahabad Safeda</span><span class="product-tag">Year Round</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-4" role="listitem">
+          <div class="product-card-img">🍋</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Lemon / Lime</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Andhra Pradesh</div>
+            <div class="product-card-tags"><span class="product-tag">High Juice %</span><span class="product-tag">Year Round</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-5" role="listitem">
+          <div class="product-card-img">🍉</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Watermelon</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Karnataka</div>
+            <div class="product-card-tags"><span class="product-tag">Seedless</span><span class="product-tag">Apr–Jul</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-6" role="listitem">
+          <div class="product-card-img">🍐</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Pear</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Himachal Pradesh</div>
+            <div class="product-card-tags"><span class="product-tag">Patharnakh</span><span class="product-tag">Jul–Sep</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div style="height:3rem;"></div>
+
+    <!-- ===== VEGETABLES ===== -->
+    <div data-group="vegetables" role="list">
+      <h3 style="font-family:var(--font-heading);font-size:1.5rem;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid var(--clr-border);color:var(--clr-text);">
+        🥦 Fresh Vegetables
+      </h3>
+      <div class="products-grid">
+        <article class="product-card reveal stagger-1" role="listitem">
+          <div class="product-card-img">🧅<span class="product-card-badge">Top Export</span></div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Onion</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Nashik, Maharashtra</div>
+            <div class="product-card-tags"><span class="product-tag">Red &amp; White</span><span class="product-tag">Year Round</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-2" role="listitem">
+          <div class="product-card-img">🥔</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Potato</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Agra, UP</div>
+            <div class="product-card-tags"><span class="product-tag">Kufri Jyoti</span><span class="product-tag">Premium Grade</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-3" role="listitem">
+          <div class="product-card-img">🧄</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Garlic</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Madhya Pradesh</div>
+            <div class="product-card-tags"><span class="product-tag">High Pungency</span><span class="product-tag">Export Grade</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-4" role="listitem">
+          <div class="product-card-img">🫚</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Ginger</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Kerala &amp; NE India</div>
+            <div class="product-card-tags"><span class="product-tag">High Oleoresin</span><span class="product-tag">Year Round</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-5" role="listitem">
+          <div class="product-card-img">🍅</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Tomato</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Karnataka</div>
+            <div class="product-card-tags"><span class="product-tag">Cherry &amp; Regular</span><span class="product-tag">Firm Texture</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-6" role="listitem">
+          <div class="product-card-img">🌶️<span class="product-card-badge">Hot Seller</span></div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Red Chili</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Andhra Pradesh</div>
+            <div class="product-card-tags"><span class="product-tag">Teja</span><span class="product-tag">Byadgi</span><span class="product-tag">High Capsaicin</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-1" role="listitem">
+          <div class="product-card-img">🫑</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Bell Pepper</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Himachal Pradesh</div>
+            <div class="product-card-tags"><span class="product-tag">R/Y/G</span><span class="product-tag">Premium Size</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-2" role="listitem">
+          <div class="product-card-img">🥕</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Carrot</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Punjab</div>
+            <div class="product-card-tags"><span class="product-tag">Export Grade</span><span class="product-tag">Oct–Mar</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-3" role="listitem">
+          <div class="product-card-img">🥦</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Broccoli</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Himachal Pradesh</div>
+            <div class="product-card-tags"><span class="product-tag">Premium Grade</span><span class="product-tag">Nov–Mar</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-4" role="listitem">
+          <div class="product-card-img">🌽</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Sweet Corn</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Gujarat &amp; MP</div>
+            <div class="product-card-tags"><span class="product-tag">High Sugar</span><span class="product-tag">Year Round</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div style="height:3rem;"></div>
+
+    <!-- ===== EXOTIC ===== -->
+    <div data-group="exotic" role="list">
+      <h3 style="font-family:var(--font-heading);font-size:1.5rem;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid var(--clr-border);color:var(--clr-text);">
+        ✨ Exotic &amp; Specialty Items
+      </h3>
+      <div class="products-grid">
+        <article class="product-card reveal stagger-1" role="listitem">
+          <div class="product-card-img">🐉<span class="product-card-badge">Exotic</span></div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Dragon Fruit</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Tamil Nadu</div>
+            <div class="product-card-tags"><span class="product-tag">Red &amp; White Flesh</span><span class="product-tag">Superfood</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-2" role="listitem">
+          <div class="product-card-img">🥥</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">King Coconut</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Kerala</div>
+            <div class="product-card-tags"><span class="product-tag">Tender &amp; Mature</span><span class="product-tag">Year Round</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-3" role="listitem">
+          <div class="product-card-img">🍍</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Pineapple</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Goa &amp; Kerala</div>
+            <div class="product-card-tags"><span class="product-tag">Kew Variety</span><span class="product-tag">High Sweetness</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-4" role="listitem">
+          <div class="product-card-img">🍈</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Star Fruit</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Andhra Pradesh</div>
+            <div class="product-card-tags"><span class="product-tag">Sweet Variety</span><span class="product-tag">Niche Export</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div style="height:3rem;"></div>
+
+    <!-- ===== HERBS ===== -->
+    <div data-group="herbs" role="list">
+      <h3 style="font-family:var(--font-heading);font-size:1.5rem;margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:2px solid var(--clr-border);color:var(--clr-text);">
+        🌿 Herbs &amp; Aromatics
+      </h3>
+      <div class="products-grid">
+        <article class="product-card reveal stagger-1" role="listitem">
+          <div class="product-card-img">🌿<span class="product-card-badge">Aromatic</span></div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Coriander</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Rajasthan</div>
+            <div class="product-card-tags"><span class="product-tag">High Aroma</span><span class="product-tag">Year Round</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-2" role="listitem">
+          <div class="product-card-img">🌱</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Fresh Fenugreek</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Rajasthan &amp; Gujarat</div>
+            <div class="product-card-tags"><span class="product-tag">Medicinal Grade</span><span class="product-tag">Oct–Feb</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-3" role="listitem">
+          <div class="product-card-img">🪴</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Curry Leaves</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> Tamil Nadu &amp; AP</div>
+            <div class="product-card-tags"><span class="product-tag">Fresh &amp; Dry</span><span class="product-tag">Year Round</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+        <article class="product-card reveal stagger-4" role="listitem">
+          <div class="product-card-img">🌿</div>
+          <div class="product-card-body">
+            <h3 class="product-card-name">Tulsi / Holy Basil</h3>
+            <div class="product-card-origin"><i class="fas fa-map-marker-alt"></i> MP &amp; UP</div>
+            <div class="product-card-tags"><span class="product-tag">Medicinal</span><span class="product-tag">Organic Available</span></div>
+            <a href="contact.html" class="product-card-action">Enquire Now →</a>
+          </div>
+        </article>
+      </div>
+    </div><!-- end data-group="herbs" -->
+    </div><!-- end #kf-catalog -->
+  </div>
+</section>
+
+<!-- CUSTOM ORDER SECTION -->
+<section class="section-pad" style="background:var(--clr-light);" aria-labelledby="custom-title">
+  <div class="container">
+    <div class="custom-order-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;">
+      <div class="reveal from-left">
+        <span class="badge section-label"><i class="fas fa-boxes"></i> Custom Orders</span>
+        <h2 class="section-title" id="custom-title">Don't See What You Need? <span>We Can Source It.</span></h2>
+        <div class="divider"></div>
+        <p class="section-sub">
+          With 500+ farm partnerships across India, we can source almost any fresh fruit or
+          vegetable you need — even if it's not in our standard catalog. Tell us what you
+          need, and we'll make it happen.
+        </p>
+        <ul style="margin-top:1.5rem;display:flex;flex-direction:column;gap:.75rem;">
+          <li style="display:flex;align-items:center;gap:.75rem;font-size:.92rem;color:var(--clr-text-secondary);">
+            <span style="color:var(--clr-primary);font-weight:800;font-size:1.1rem;">✓</span> Minimum order: 1 metric ton
+          </li>
+          <li style="display:flex;align-items:center;gap:.75rem;font-size:.92rem;color:var(--clr-text-secondary);">
+            <span style="color:var(--clr-primary);font-weight:800;font-size:1.1rem;">✓</span> Custom grading &amp; packaging available
+          </li>
+          <li style="display:flex;align-items:center;gap:.75rem;font-size:.92rem;color:var(--clr-text-secondary);">
+            <span style="color:var(--clr-primary);font-weight:800;font-size:1.1rem;">✓</span> Organic options for most products
+          </li>
+          <li style="display:flex;align-items:center;gap:.75rem;font-size:.92rem;color:var(--clr-text-secondary);">
+            <span style="color:var(--clr-primary);font-weight:800;font-size:1.1rem;">✓</span> Free samples before bulk orders
+          </li>
+        </ul>
+        <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap;">
+          <a href="contact.html" class="btn btn-primary"><i class="fas fa-envelope"></i> Request Custom Order</a>
+          <a href="contact.html" class="btn btn-outline-dark"><i class="fas fa-file-alt"></i> Get a Quote</a>
+        </div>
+      </div>
+      <div class="reveal from-right">
+        <div style="background:linear-gradient(135deg,var(--clr-primary-dark),var(--clr-primary));border-radius:var(--radius-2xl);padding:3rem;color:white;">
+          <div style="font-size:3rem;margin-bottom:1rem;">📋</div>
+          <h3 style="font-family:var(--font-heading);font-size:1.6rem;margin-bottom:1rem;">Quick Enquiry</h3>
+          <p style="color:rgba(255,255,255,0.75);font-size:.9rem;margin-bottom:1.5rem;line-height:1.7;">
+            Send us a quick message with your product requirements and we'll respond within 2 business hours.
+          </p>
+          <div style="display:flex;flex-direction:column;gap:1rem;">
+            <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:rgba(255,255,255,0.1);border-radius:var(--radius-md);">
+              <span style="font-size:1.5rem;">📧</span>
+              <div>
+                <div style="font-size:.8rem;color:rgba(255,255,255,0.6);">Email Us</div>
+                <a href="mailto:exports@kingfresh.com" style="color:var(--clr-secondary);font-weight:600;">exports@kingfresh.com</a>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:rgba(255,255,255,0.1);border-radius:var(--radius-md);">
+              <span style="font-size:1.5rem;">📞</span>
+              <div>
+                <div style="font-size:.8rem;color:rgba(255,255,255,0.6);">Call / WhatsApp</div>
+                <a href="tel:+919876543210" style="color:var(--clr-secondary);font-weight:600;">+91 98765 43210</a>
+              </div>
+            </div>
+            <a href="contact.html" class="btn btn-secondary" style="text-align:center;justify-content:center;">
+              <i class="fas fa-paper-plane"></i> Send Full Enquiry Form
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section section-pad" aria-labelledby="prod-cta-title">
+  <div class="container">
+    <div class="cta-inner reveal">
+      <span class="badge badge-white section-label" style="margin-bottom:1rem;"><i class="fas fa-handshake"></i> Ready to Order?</span>
+      <h2 class="cta-title" id="prod-cta-title">Get a Free Quote for<br/>Any Product Today</h2>
+      <p class="cta-desc">Fill out our quick enquiry form and our export specialists will respond within 2 business hours with pricing, availability, and documentation details.</p>
+      <div class="cta-actions">
+        <a href="contact.html" class="btn btn-secondary btn-lg"><i class="fas fa-envelope"></i> Request Quote</a>
+        <a href="about.html" class="btn btn-outline btn-lg"><i class="fas fa-shield-alt"></i> Our Quality Promise</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-logo" style="margin-bottom:1.25rem;"><div class="nav-logo-icon">🌿</div><div class="nav-logo-text">KingFresh<span>Trading Company</span></div></div>
+        <p class="footer-brand-desc">Premier exporter of fresh fruits and vegetables from India to the world. Certified quality, reliable logistics, 6+ years of trusted partnerships.</p>
+        <div class="footer-social">
+          <a href="#" class="footer-social-btn" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="footer-social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="footer-social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="footer-social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="index.html" class="footer-link">Home</a></li>
+          <li><a href="about.html" class="footer-link">About Us</a></li>
+          <li><a href="products.html" class="footer-link">Our Products</a></li>
+          <li><a href="contact.html" class="footer-link">Contact Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Top Products</div>
+        <ul class="footer-links">
+          <li><a href="products.html" class="footer-link">Alphonso Mango</a></li>
+          <li><a href="products.html" class="footer-link">Fresh Grapes</a></li>
+          <li><a href="products.html" class="footer-link">Fresh Onion</a></li>
+          <li><a href="products.html" class="footer-link">Pomegranate</a></li>
+          <li><a href="products.html" class="footer-link">Garlic &amp; Ginger</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <div class="footer-contact-items">
+          <div class="footer-contact-item"><span class="footer-contact-icon">📍</span><span>KingFresh House, Plot 20, Hanuman Vatika, Gokulpura Kalwar Road, Jaipur – 302012, India</span></div>
+          <div class="footer-contact-item"><span class="footer-contact-icon">📞</span><a href="tel:+919876543210" style="color:inherit;">+91 98765 43210</a></div>
+          <div class="footer-contact-item"><span class="footer-contact-icon">📧</span><a href="mailto:exports@kingfresh.com" style="color:inherit;">exports@kingfresh.com</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; <span id="year"></span> KingFresh Trading Company. All rights reserved. 🇮🇳</p>
+      <nav class="footer-legal"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></nav>
+    </div>
+  </div>
+</footer>
+
+<button id="back-to-top" aria-label="Back to top"><i class="fas fa-arrow-up"></i></button>
+<a id="whatsapp-btn" href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+<div id="cookie-banner" role="dialog">
+  <p class="cookie-text">We use cookies to enhance your experience. <a href="#">Learn more</a></p>
+  <div class="cookie-btns"><button class="cookie-decline">Decline</button><button class="cookie-accept">Accept All</button></div>
+</div>
+<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+<script src="js/kf-data.js"></script>
+<script src="js/kf-site.js" defer></script>
+<script src="js/main.js" defer></script>
+<style>
+  @media(max-width:768px){
+    .custom-order-grid{grid-template-columns:1fr!important;gap:2rem!important;}
+    .products-filter-bar{flex-direction:column!important;}
+    .filter-search{width:100%!important;}
+  }
+  @media(max-width:480px){
+    .products-filter-bar{gap:.6rem!important;}
+  }
+</style>
+</body>
+</html>

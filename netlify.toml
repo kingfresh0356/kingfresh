@@ -1,0 +1,32 @@
+# =====================================================
+# Netlify Configuration for KingFresh Trading Company
+# =====================================================
+
+[build]
+  publish = "."        # Serve files from root folder
+
+# Enable Netlify Identity widget (for CMS admin login)
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Security headers for all pages
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# Redirect www to non-www (optional — uncomment when domain is set)
+# [[redirects]]
+#   from = "https://www.kingfreshtrading.com/*"
+#   to   = "https://kingfreshtrading.com/:splat"
+#   status = 301
+#   force  = true

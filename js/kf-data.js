@@ -20,10 +20,10 @@ const DEFAULT_SETTINGS = {
   companyName:   "KingFresh Trading Company",
   tagline:       "From Farm to the World",
   yearFounded:   "2019",
-  phone:         "+91 98765 43210",
-  whatsapp:      "919876543210",            // digits only, no +
+  phone:         "+91 9024309960",
+  whatsapp:      "919024309960",            // digits only, no +
   whatsappMsg:   "Hello KingFresh! I am interested in your export products.",
-  email:         "exports@kingfresh.com",
+  email:         "info@kingfreshtc.com",
   address:       "KingFresh House, Plot 20, Hanuman Vatika, Gokulpura Kalwar Road, Jaipur – 302012, India",
   countries:     "50+",
   tonsYear:      "10,000+",
